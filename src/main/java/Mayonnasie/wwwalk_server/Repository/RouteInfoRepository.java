@@ -424,10 +424,10 @@ public class RouteInfoRepository {
             Long num= 0L;
             while (rs.next()){
                 num++;
-                return num;
+
 
             }
-            return null;
+            return num;
 
         }catch (SQLException e){
             log.error("can't find route_id db findById error",e);
@@ -452,10 +452,9 @@ public class RouteInfoRepository {
             Long num= 0L;
             while (rs.next()){
                 num++;
-                return num;
 
             }
-            return null;
+            return num;
 
         }catch (SQLException e){
             log.error("can't find route_id db findById error",e);
