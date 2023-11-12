@@ -250,6 +250,10 @@ public class RouteInfoRepository {
                 allRouteForm.setDuration(rs.getLong("DURATION"));
                 allRouteForm.setPins(findallPin(rs.getString("ROUTE_ID")));
                 allRouteForm.setTag(findTagByRouteId(rs.getString("ROUTE_ID")));
+                allRouteForm.setUserName(findUserName(rs.getString("USER_ID")));
+                allRouteForm.setPhoto_url(findPhotoUrl(rs.getString("USER_ID")));
+                allRouteForm.setComment_num(findCommentNum(rs.getString("ROUTE_ID")));
+                allRouteForm.setFavorite_num(findFavoriteNum(rs.getString("ROUTE_ID")));
                 allRouteForms.add(allRouteForm);
             }
             return allRouteForms;
@@ -351,6 +355,116 @@ public class RouteInfoRepository {
             close(con, pstmt, rs);
         }
     }
+
+
+    public String findUserName(String user_id) throws SQLException {
+        String sql = "select * from USER_INFO where USER_ID = ?";
+
+        Connection con = null;
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+
+        try{
+            con = getConnection();
+            pstmt = con.prepareStatement(sql);
+            pstmt.setString(1, user_id);
+            rs = pstmt.executeQuery();
+            if (rs.next()){
+                return rs.getString("USER_NAME");
+
+            }
+            return null;
+
+        }catch (SQLException e){
+            log.error("can't find route_id db findById error",e);
+            throw e;
+        }finally {
+            close(con, pstmt, rs);
+        }
+    }
+
+    public String findPhotoUrl(String user_id) throws SQLException {
+        String sql = "select * from USER_INFO where USER_ID = ?";
+
+        Connection con = null;
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+
+        try{
+            con = getConnection();
+            pstmt = con.prepareStatement(sql);
+            pstmt.setString(1, user_id);
+            rs = pstmt.executeQuery();
+            if (rs.next()){
+                return rs.getString("PHOTO_URL");
+
+            }
+            return null;
+
+        }catch (SQLException e){
+            log.error("can't find route_id db findById error",e);
+            throw e;
+        }finally {
+            close(con, pstmt, rs);
+        }
+    }
+
+    public Long findCommentNum(String route_id) throws SQLException {
+        String sql = "select * from COMMENT_OF where ROUTE_ID = ?";
+
+        Connection con = null;
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+
+        try{
+            con = getConnection();
+            pstmt = con.prepareStatement(sql);
+            pstmt.setString(1, route_id);
+            rs = pstmt.executeQuery();
+            Long num= 0L;
+            while (rs.next()){
+                num++;
+                return num;
+
+            }
+            return null;
+
+        }catch (SQLException e){
+            log.error("can't find route_id db findById error",e);
+            throw e;
+        }finally {
+            close(con, pstmt, rs);
+        }
+    }
+
+    public Long findFavoriteNum(String route_id) throws SQLException {
+        String sql = "select * from FAVORITE_OF where ROUTE_ID = ?";
+
+        Connection con = null;
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+
+        try{
+            con = getConnection();
+            pstmt = con.prepareStatement(sql);
+            pstmt.setString(1, route_id);
+            rs = pstmt.executeQuery();
+            Long num= 0L;
+            while (rs.next()){
+                num++;
+                return num;
+
+            }
+            return null;
+
+        }catch (SQLException e){
+            log.error("can't find route_id db findById error",e);
+            throw e;
+        }finally {
+            close(con, pstmt, rs);
+        }
+    }
+
 
     private void close(Connection con, Statement stmt, ResultSet rs){
 

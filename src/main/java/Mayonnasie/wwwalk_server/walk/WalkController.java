@@ -2,6 +2,7 @@ package Mayonnasie.wwwalk_server.walk;
 
 import Mayonnasie.wwwalk_server.login.LoginForm;
 import Mayonnasie.wwwalk_server.login.LoginService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -26,6 +27,7 @@ public class WalkController {
 
     @GetMapping("/api/v1/route/getAllRouteInfo")
     public ArrayList<AllRouteForm> getAllroute() throws SQLException {
+        log.info("getAllrouteInfo");
         return walkService.searchAllRouteInfo();
     }
 
@@ -52,13 +54,15 @@ public class WalkController {
     }
 
     @PostMapping("/api/v1/route/end")
-    public String walkEnd(@RequestBody StartForm text) throws SQLException {
+    public EndForm walkEnd(@RequestBody StartForm text) throws SQLException {
         log.info("walkend text : " + text);
         StartForm startForm = new StartForm();
         startForm.setUser_id(text.getUser_id());
         startForm.setLat(text.getLat());
         startForm.setLon(text.getLon());
-        return walkService.walkend(startForm);
+        EndForm endForm = new EndForm();
+        endForm.setRoute_id(walkService.walkend(startForm));
+        return endForm;
     }
 
     @PostMapping("/api/v1/route/addpoint")

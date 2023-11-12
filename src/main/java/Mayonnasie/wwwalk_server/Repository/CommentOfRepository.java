@@ -75,6 +75,7 @@ public class CommentOfRepository {
             while (rs.next()){
                 CommentReadForm commentReadForm = new CommentReadForm();
                 commentReadForm.setUserNickName(findNickName(rs.getString("USER_ID")));
+                commentReadForm.setPhoto_url(findPhotoUrl(rs.getString("USER_ID")));
                 commentReadForm.setComment(rs.getString("COMMENT"));
                 commentReadForm.setComment_id(rs.getString("COMMENT_ID"));
                 commentReadForm.setCommentDate(rs.getLong("CDATE"));
@@ -105,6 +106,32 @@ public class CommentOfRepository {
             rs = pstmt.executeQuery();
             if (rs.next()){
                 return rs.getString("USER_NAME");
+            }else {
+                return "유저 없음";
+            }
+        }catch (SQLException e){
+            log.error("db findById error",e);
+            throw e;
+        }finally {
+            close(con, pstmt, rs);
+        }
+    }
+
+    private String findPhotoUrl(String u_id) throws SQLException {
+        String sql = "select * from USER_INFO where USER_ID = ?";
+
+        Connection con = null;
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+
+        try{
+            con = getConnection();
+            pstmt = con.prepareStatement(sql);
+            pstmt.setString(1, u_id);
+
+            rs = pstmt.executeQuery();
+            if (rs.next()){
+                return rs.getString("PHOTO_URL");
             }else {
                 return "유저 없음";
             }

@@ -8,6 +8,9 @@ import lombok.Data;
 public class CommentReadForm {
     @NotBlank
     private String userNickName;
+
+    private String photo_url;
+
     @NotBlank
     private String comment;
 
