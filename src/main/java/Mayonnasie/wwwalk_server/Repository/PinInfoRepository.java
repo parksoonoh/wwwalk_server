@@ -28,6 +28,7 @@ public class PinInfoRepository {
             pstmt.setString(3, pinForm.getPhoto_url());
             pstmt.setString(4, calrouteid); //route id
             pstmt.setString(5, pinForm.getUser_id() ); //user id
+            log.info("LAT : " + pinForm.getLat() + "LON : " + pinForm.getLon() + "route_id : " + calrouteid);
             pstmt.setString(6, findPointId(pinForm.getLat(), pinForm.getLon(), calrouteid)); //point id
             pstmt.setString(7, pinForm.getAddress()); //user id
             pstmt.setString(8, pinForm.getAddress_name()); //user id
@@ -64,7 +65,7 @@ public class PinInfoRepository {
     }
 
     public String findRouteId(String user_id) throws SQLException {
-        String sql = "select * from ROUTE_INFO where user_id = ? AND ROWNUM <= 1 order by RDATE DESC";
+        String sql = "select * from ROUTE_INFO where user_id = ? ORDER BY RDATE DESC";
 
         Connection con = null;
         PreparedStatement pstmt = null;
@@ -182,7 +183,7 @@ public class PinInfoRepository {
     }
 
     public ArrayList<OnePinForm> getOnePin(String pin_id) throws SQLException {
-        String sql = "select * from PIN_INFO";
+        String sql = "select * from PIN_INFO where PIN_ID = ?";
 
         Connection con = null;
         PreparedStatement pstmt = null;
@@ -191,6 +192,7 @@ public class PinInfoRepository {
         try{
             con = getConnection();
             pstmt = con.prepareStatement(sql);
+            pstmt.setString(1, pin_id);
             ArrayList<OnePinForm> allPin = new ArrayList<>();
             rs = pstmt.executeQuery();
             if (rs.next()){
@@ -341,7 +343,7 @@ public class PinInfoRepository {
     }
 
     private Double Cal_Lon(String point_id) throws SQLException {
-        String sql = "select * from POINT_OF";
+        String sql = "select * from POINT_OF where POINT_ID = ?";
 
         Connection con = null;
         PreparedStatement pstmt = null;
@@ -350,6 +352,7 @@ public class PinInfoRepository {
         try{
             con = getConnection();
             pstmt = con.prepareStatement(sql);
+            pstmt.setString(1,point_id);
             rs = pstmt.executeQuery();
             if (rs.next()){
                 return rs.getDouble("POINT_LON");
@@ -365,7 +368,7 @@ public class PinInfoRepository {
     }
 
     private Double Cal_Lat(String point_id) throws SQLException {
-        String sql = "select * from POINT_OF";
+        String sql = "select * from POINT_OF where POINT_ID = ?";
 
         Connection con = null;
         PreparedStatement pstmt = null;
@@ -374,6 +377,7 @@ public class PinInfoRepository {
         try{
             con = getConnection();
             pstmt = con.prepareStatement(sql);
+            pstmt.setString(1,point_id);
             rs = pstmt.executeQuery();
             if (rs.next()){
                 return rs.getDouble("POINT_LAT");

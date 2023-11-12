@@ -27,4 +27,9 @@ public class SearchController {
     public ArrayList<AllRouteForm> recommend(@RequestParam(name = "user_id") String user_id) throws SQLException {
         return searchService.recommend(user_id);
     }
+
+    @GetMapping("/api/v1/route/favorite")
+    public ArrayList<AllRouteForm> favorite(@RequestParam(name = "user_id") String user_id) throws SQLException {
+        return searchService.favorite(user_id);
+    }
 }

@@ -262,7 +262,7 @@ public class RouteInfoRepository {
     }
 
     public AllRouteForm findAllRouteInfoByRouteId(String route_id) throws SQLException {
-        String sql = "select * from ROUTE_INFO where PUBLIC = 'PUBLIC' and ROUTE_ID = route_id";
+        String sql = "select * from ROUTE_INFO where PUBLIC = 'PUBLIC' and ROUTE_ID = ?";
 
         Connection con = null;
         PreparedStatement pstmt = null;
@@ -271,7 +271,7 @@ public class RouteInfoRepository {
         try{
             con = getConnection();
             pstmt = con.prepareStatement(sql);
-
+            pstmt.setString(1, route_id);
             rs = pstmt.executeQuery();
             if(rs.next()){
                 AllRouteForm allRouteForm = new AllRouteForm();

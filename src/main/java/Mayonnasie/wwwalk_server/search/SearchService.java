@@ -16,6 +16,7 @@ import java.util.ArrayList;
 public class SearchService {
     private final PinInfoRepository pinInfoRepository;
     private final LikeOfRepository likeOfRepository;
+    private final FavoriteOfRepository favoriteOfRepository;
     private final TagOfRepository tagOfRepository;
     private final RouteInfoRepository routeInfoRepository;
 
@@ -24,8 +25,17 @@ public class SearchService {
     }
 
     public ArrayList<AllRouteForm> recommend(String user_id) throws SQLException {
-        // like + favorite 한 id 값들
+
         ArrayList<String> collectRouteId = new ArrayList<>();
+
+        // favorite 한 id 값들
+        for (String route_id : favoriteOfRepository.findByUserId(user_id)){
+            if(!collectRouteId.contains(route_id)){
+                collectRouteId.add(route_id);
+            }
+        }
+
+        // like 한 id 값들
         for (String route_id : likeOfRepository.findByUserId(user_id)){
             if(!collectRouteId.contains(route_id)){
                 collectRouteId.add(route_id);
@@ -56,5 +66,17 @@ public class SearchService {
         }
 
         return allRouteForms;
+    }
+
+    public ArrayList<AllRouteForm> favorite(String user_id) throws SQLException {
+        ArrayList<String> favoriteRouteId = favoriteOfRepository.findByUserId(user_id);
+        ArrayList<AllRouteForm> favoriteRoutes = new ArrayList<>();
+        for (String route_id : favoriteRouteId){
+            log.info("Favorite Route_id : " + route_id);
+            AllRouteForm favoriteRoute = routeInfoRepository.findAllRouteInfoByRouteId(route_id);
+            if (favoriteRoute != null)
+                favoriteRoutes.add(favoriteRoute);
+        }
+        return favoriteRoutes;
     }
 }
